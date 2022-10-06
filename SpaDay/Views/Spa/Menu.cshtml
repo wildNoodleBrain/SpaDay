@@ -3,24 +3,35 @@
 *@
 @{
 }
-<div id="clientProfile">
-</div>
-<div id="servicesMenu">
-</div>
 
 <h1>Fancy Spa</h1>
 <div id="clientProfile">
+    <h3>Client Profile</h3>
+    <p>@ViewBag.name</p>
 </div>
 <div id="servicesMenu">
 
     <h5>Facial Treatments</h5>
-    <p>Your //TODO: pass the skintype value in here// skin type is best suited to the follow facial types:</p>
+    <p>Your @ViewBag.skintype skin type is best suited to the follow facial types:</p>
     
     <ul>
-        //TODO: iterate through appropriate facial treatments
+        
+        @foreach (String appropriateFacials in ViewBag.appropriateFacials)
+        {
+            <li>@appropriateFacials</li>
+        }
     </ul>
 
     <h5>Nail Services</h5>
-    // TODO: display a description for the nail service selected
+    @if (ViewBag.manipedi == "manicure")
+    {
+        <p>Our manicure is a great way to spend 30 minutes of your day! We use shea butter hand cream and the finest gel polish.</p>
+    }
+   else if(ViewBag.manipedi == "pedicure")
+   {
+        <p>Relax for 45 minutes in pure luxury! Our massage chairs and experienced nail techs are here to get your feet in shape for sandal season!</p>
+   }
+
+
     
 </div>
