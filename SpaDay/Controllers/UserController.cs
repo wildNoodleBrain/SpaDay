@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SpaDay.Models;
+using SpaDay.ViewModels;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -17,28 +18,35 @@ namespace SpaDay.Controllers
             return View();
         }
 
+        [HttpGet]
         public IActionResult Add()
         {
-            return View();
+            AddUserViewModel addUserViewModel = new AddUserViewModel();
+            return View(addUserViewModel);
         }
 
         [HttpPost]
         [Route("/user")]
-        public IActionResult SubmitAddUserForm(User newUser, string verify)
+        public IActionResult SubmitAddUserForm(AddUserViewModel addUserViewModel)
         {
-            if (newUser.Password == verify)
+            if (ModelState.IsValid)
             {
-                ViewBag.user = newUser;
-                return View("Index");
+                User user = new User(addUserViewModel.UserName, addUserViewModel.EmailAddress, addUserViewModel.Password);
+                if (addUserViewModel.Password == addUserViewModel.VerifyPassword)
+                {
+
+                    return View("Index", user);
+                }
+                else
+                {
+                    ViewBag.error = "Passwords do not match! Try again!";
+                    return View("Add", user);
+                }
             }
-            else
-            {
-                ViewBag.error = "Passwords do not match! Try again!";
-                ViewBag.userName = newUser.Username;
-                ViewBag.eMail = newUser.Email;
-                return View("Add");
-            }
+            ViewBag.error = "One or more inputs are not valid";
+            return View("Add");
         }
 
     }
+
 }
